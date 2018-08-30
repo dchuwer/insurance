@@ -1,0 +1,32 @@
+
+
+
+<mat-toolbar color="primary" class="example-toolbar">
+  <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
+  <h1 class="example-app-name">נטו ביטוח</h1>
+</mat-toolbar>
+
+
+<mat-sidenav-container class="example-sidenav-container"
+[style.marginTop.px]="mobileQuery.matches ? 0 : 0">
+<mat-sidenav #snav [mode]="mobileQuery.matches ? 'side' : 'side'"
+[fixedInViewport]="false">
+<mat-nav-list (click)="snav.close()"> 
+
+<a mat-list-item routerLink="." >Home</a>
+<a mat-list-item routerLink="/about" >מי אנחנו</a>
+<a mat-list-item routerLink="/car-insurance">ביטוח רכב</a>
+
+<a mat-list-item routerLink="/contact">יצירת קשר</a>
+
+</mat-nav-list>
+</mat-sidenav>
+
+
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+    
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+

@@ -1,0 +1,293 @@
+
+  <mat-vertical-stepper linear #stepper>
+
+      
+    
+
+    <mat-step [stepControl]="firstFormGroup" class="titlestep" label="תקופת ביטוח"  [editable]="isEditable">
+      <form [formGroup]="firstFormGroup">
+         
+        <mat-form-field>
+            <input matInput [min]="minDate"  [matDatepicker]="picker" placeholder="תאריך תחילת ביטוח" formControlName="datestart" required>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <div>
+          <button mat-raised-button color="accent" matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
+      <form [formGroup]="secondFormGroup">
+        <ng-template matStepLabel>פרטי רכב</ng-template>
+        <mat-form-field>
+            <mat-select formControlName="factory" (selectionChange)="getYears($event)" placeholder="יצרן">
+              <mat-option *ngFor="let factory of factories" [value]="factory.id" >
+                {{factory.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select  formControlName="year" (selectionChange)="getModels($event)" placeholder="שנת ייצור">
+              <mat-option *ngFor="let year of years" [value]="year.year">
+                {{year.year}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select formControlName="model" (selectionChange)="getModelsDistinct($event)" placeholder="דגם">
+              <mat-option *ngFor="let model of filtermodels" [value]="model.modelName">
+                {{model.modelName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select formControlName="modelcar" (selectionChange)="getAlarm($event)"  placeholder="דגם משנה">
+              <mat-option *ngFor="let modelcar of modelcars" [value]="modelcar.modelcar.modelDetails">
+                {{modelcar.modelcar.modelDetails}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div class="alarm" *ngIf=(alarm) >
+            <mat-radio-group formControlName="alarm" class="example-radio-group" >
+              <h4>
+                  האם מותקנת ברכב מערכת התרעה על סטייה מהנתיב או ירידה מהשוליים?</h4>
+              <mat-radio-button  class="example-radio-button"  value="yes">
+                כן
+              </mat-radio-button>
+              <mat-radio-button  class="example-radio-button"  value="no">
+                  לא
+                </mat-radio-button>
+            </mat-radio-group>
+
+          
+              <mat-radio-group formControlName="alarmeye" class="alrameye" >
+                <h4>
+                    האם מותקנת ברכב מערכת התרעה על אי שמירת מרחק?
+                </h4>
+                <mat-radio-button  class="example-radio-button"  value="yes">
+                  כן
+                </mat-radio-button>
+                <mat-radio-button  class="example-radio-button"  value="no">
+                    לא
+                  </mat-radio-button>
+              </mat-radio-group>
+  
+            </div>
+          
+        <br>
+        <div>
+          <button mat-button mat-raised-button color="primary" matStepperPrevious>Back</button>
+          <button mat-button mat-raised-button color="accent" matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
+        <form [formGroup]="thirdFormGroup">
+          <ng-template matStepLabel>נוהגים ברכב</ng-template>
+
+          <mat-radio-group formControlName="numberDriver" class="numberdrive" >
+            <h4>
+              ?מספר הרשאים לנהוג ברכב 
+            </h4>
+            <mat-radio-button  class="example-radio-button"  value=1>
+              נהג אחד
+            </mat-radio-button>
+            <mat-radio-button  class="example-radio-button"  value=2>
+             שני נהגים
+            </mat-radio-button>
+            <mat-radio-button  class="example-radio-button"  value=3>
+              כל נהג
+            </mat-radio-button>
+          </mat-radio-group>
+          
+          <mat-radio-group formControlName="genderDriver" class="alrameye" >
+            <h4>
+              מין הנהג הצעיר ביותר 
+            </h4>
+            <mat-radio-button  class="example-radio-button"  value="man">
+              זכר
+            </mat-radio-button>
+            <mat-radio-button  class="example-radio-button"  value="woman">
+              נקבה
+            </mat-radio-button>
+          </mat-radio-group> 
+          <br>
+          <mat-form-field>
+                   
+          
+            <input matInput [max]="maxDateBorn"  [matDatepicker]="picker1" formControlName="dateDriverBorn" 
+             placeholder="תאריך לידה של הנהג הצעיר ביותר " (dateInput)="getYearsLicense($event)" required>
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+         
+          </mat-form-field>
+          <br>
+          <mat-form-field>
+            <mat-select  formControlName="yearsLicense"  placeholder=" וותק נהיגה מינימלי">
+               
+              <mat-option *ngFor="let yearLicense of yearLicenses; let i = index"  [value]="yearLicense" >
+               {{yearLicense}} 
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        
+       
+          <div>
+              <button mat-button mat-raised-button color="primary" matStepperPrevious>Back</button>
+              <button mat-button mat-raised-button color="accent" matStepperNext>Next</button>
+            </div>
+        </form>
+    </mat-step>
+
+    <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
+        <form [formGroup]="fourthFormGroup">
+          <ng-template matStepLabel>עבר ביטוחי</ng-template>
+
+          <mat-radio-group formControlName="avarBituach" [(ngModel)]="avarBituach" class="numberdrive" >
+            <h4>
+              ?האם היה ביטוח מקיף / רכב ליסינג על שמך ברצף ב-3 שנים האחרונות 
+            </h4>
+            <mat-radio-button  class="example-radio-button"  value="yes">
+                כן
+            </mat-radio-button>
+            <mat-radio-button  class="example-radio-button"  value="no">
+                  לא
+                </mat-radio-button>
+          </mat-radio-group>
+
+          <div id='avarBit' *ngIf="avarBituach == 'no'" > 
+
+              <mat-radio-group formControlName="avarBefore1"  class="numberdrive" >
+                  <h4>
+                    ?לפני שנה 
+                  </h4>
+                  <mat-radio-button  class="example-radio-button"  value="leasing">
+                      מקיף / ליסינג
+                    </mat-radio-button>
+                    <mat-radio-button  class="example-radio-button"  value="gimel">
+                      צד ג                
+                    </mat-radio-button>
+                    <mat-radio-button  class="example-radio-button"  value="lo bituach">
+                        ללא ביטוח                
+                    </mat-radio-button>
+              </mat-radio-group>
+
+              <mat-radio-group formControlName="avarBefore2"  class="numberdrive" >
+                  <h4>
+                    ?לפני שנתיים 
+                  </h4>
+                  <mat-radio-button  class="example-radio-button"  value="leasing">
+                      מקיף / ליסינג
+                    </mat-radio-button>
+                    <mat-radio-button  class="example-radio-button"  value="gimel">
+                      צד ג                
+                    </mat-radio-button>
+                    <mat-radio-button  class="example-radio-button"  value="lo bituach">
+                        ללא ביטוח                
+                    </mat-radio-button>
+              </mat-radio-group>
+
+              <mat-radio-group formControlName="avarBefore3"  class="numberdrive" >
+                  <h4>
+                    ?לפני שלוש שנים 
+                  </h4>
+                  <mat-radio-button  class="example-radio-button"  value="leasing">
+                      מקיף / ליסינג
+                    </mat-radio-button>
+                    <mat-radio-button  class="example-radio-button"  value="gimel">
+                      צד ג                
+                    </mat-radio-button>
+                    <mat-radio-button  class="example-radio-button"  value="lo bituach">
+                        ללא ביטוח                
+                    </mat-radio-button>
+              </mat-radio-group>
+          </div>
+
+          <mat-radio-group formControlName="tviot" [(ngModel)]="tviot" class="numberdrive" >
+              <h4>
+                ?האם היו לך תביעות רכוש ב-3 שנים האחרונות
+              </h4>
+              <mat-radio-button  class="example-radio-button"  value="0">
+                  ללא תביעות
+              </mat-radio-button>
+              <mat-radio-button  class="example-radio-button"  value="1">
+                    תביעות אחת
+              </mat-radio-button>
+              <mat-radio-button  class="example-radio-button"  value="2">
+                2 ומעלה
+            </mat-radio-button>
+            </mat-radio-group>
+
+            <div id='avartviot' *ngIf="tviot == '1'" > 
+
+                <mat-radio-group formControlName="avarTviot"  class="numberdrive" >
+                    <h4>
+                        באיזו שנה? 
+                    </h4>
+                    <mat-radio-button  class="example-radio-button"  value="1">
+                        שנה אחרונה
+                      </mat-radio-button>
+                      <mat-radio-button  class="example-radio-button"  value="2">
+                         לפני שנתיים                
+                      </mat-radio-button>
+                      <mat-radio-button  class="example-radio-button"  value="3">
+                       לפני שלוש שנים                
+                      </mat-radio-button>
+                </mat-radio-group>
+            </div>
+
+            <mat-radio-group formControlName="tviotGuf" [(ngModel)]="tviotGuf" class="numberdrive" >
+                <h4>
+                  האם היו לך תביעות גוף ב-3 שנים האחרונות?
+
+                </h4>
+                <mat-radio-button  class="example-radio-button"  value="0">
+                    ללא תביעות
+                </mat-radio-button>
+                <mat-radio-button  class="example-radio-button"  value="1">
+                      תביעות אחת
+                </mat-radio-button>
+                <mat-radio-button  class="example-radio-button"  value="2">
+                  2 ומעלה
+              </mat-radio-button>
+              </mat-radio-group>
+  
+              <div id='avartviotguf' *ngIf="tviotGuf == '1'" > 
+  
+                  <mat-radio-group formControlName="avarTviotGuf"  class="numberdrive" >
+                      <h4>
+                          באיזו שנה? 
+                      </h4>
+                      <mat-radio-button  class="example-radio-button"  value="1">
+                          שנה אחרונה
+                        </mat-radio-button>
+                        <mat-radio-button  class="example-radio-button"  value="2">
+                           לפני שנתיים                
+                        </mat-radio-button>
+                        <mat-radio-button  class="example-radio-button"  value="3">
+                         לפני שלוש שנים                
+                        </mat-radio-button>
+                  </mat-radio-group>
+              </div>
+
+
+          <div>
+              <button mat-button mat-raised-button color="primary" matStepperPrevious>Back</button>
+              <button mat-button mat-raised-button color="accent" matStepperNext>Next</button>
+          </div>
+        </form>
+    </mat-step>
+
+
+    <mat-step>
+      <ng-template matStepLabel>Done</ng-template>
+      You are now done.
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="stepper.reset()">Reset</button>
+        <button mat-button (click)="form1()">Submit</button>
+      </div>
+    </mat-step>
+  </mat-vertical-stepper>
